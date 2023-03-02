@@ -2,7 +2,9 @@ import math
 import random
 
 import matplotlib
+import matplotlib.pyplot as plt
 from foronoi import Voronoi, Polygon
+import perlin
 
 import sys
 
@@ -15,6 +17,9 @@ class Settings:
         self.height: int = int(args[1])
         self.tiles: int = int(args[2])
         self.min_size: float = math.sqrt(min(self.width, self.height) / self.tiles)
+        self.seed = None if not args[3] else args[3]  # set custom seed
+        self.perlin_map = perlin.Perlin(self.seed)
+        fig, axes = plt.plot()  # TODO: this
         self.show_centers: bool = False if args[3] == "False" else True
 
 
@@ -41,6 +46,13 @@ def get_random_color():
         return p.Color("darkgreen")
     else:
         return p.Color("royalblue")
+
+
+def get_perlin_map_color(pos: (int, int), settings: Settings) -> (int, int, int):
+    # use perlin noise to create a reasonable map of heights to determine tile color
+    # the whole region is colored according to the tile center positions eval in the perlin map
+
+    pass
 
 
 def calculate_voronoi_diagram(tiles, settings: Settings):
